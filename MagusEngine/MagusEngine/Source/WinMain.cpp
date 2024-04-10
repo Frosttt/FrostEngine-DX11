@@ -1,12 +1,16 @@
-#include <Windows.h>
+#include "FrWin.h"
 #include "WindowsMessageMap.h"
 #include <iostream>
 #include <sstream>
+
+
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static WindowsMessageMap mm;
 	OutputDebugStringA((mm(msg, lParam, wParam).c_str()));
+
 
 	switch (msg)
 	{
@@ -34,6 +38,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+
+
+
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
