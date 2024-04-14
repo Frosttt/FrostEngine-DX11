@@ -27,6 +27,9 @@
     <ClCompile Include="Source\Core\Private\FRException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Private\Keyboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Public\WindowsMessageMap.h">
@@ -41,5 +44,27 @@
     <ClInclude Include="Source\Core\Public\FRException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Public\Keyboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="D:\furry\my work\_2023\Frostdurr256.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="C:\Users\Chris\Downloads\Frostdurr.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="frostengine.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FrostEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

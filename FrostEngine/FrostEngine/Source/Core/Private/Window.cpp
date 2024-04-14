@@ -1,12 +1,13 @@
 #include "Window.h"
 #include <sstream>
+#include "resource.h"
 
 
 // Window Class Stuff
 Window::WindowClass Window::WindowClass::wndClass;
 
 
-Window::Window(int _width, int _height, const char* name) noexcept
+Window::Window(int _width, int _height, const char* name) 
  : width(_width)
  , height(_height)
 {
@@ -15,7 +16,11 @@ Window::Window(int _width, int _height, const char* name) noexcept
 	wr.top = 100;
 	wr.right = width + wr.left;
 	wr.bottom = height + wr.top;
-	AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+
+	if (FAILED(AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+	{
+		throw FRWND_LAST_EXCEPT();
+	}
 
 	hWnd = CreateWindow(
 		WindowClass::GetName(), name,
@@ -23,6 +28,11 @@ Window::Window(int _width, int _height, const char* name) noexcept
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this
 	);
+
+	if (hWnd == nullptr)
+	{
+		throw FRWND_LAST_EXCEPT();
+	}
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 }
 
@@ -59,9 +69,33 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 {
 	switch (msg)
 	{
+		// Close Screen
 		case WM_CLOSE:
 			PostQuitMessage(0);
 			return 0;
+		case WM_KILLFOCUS:
+			KBInput.ClearState();
+			break;
+
+		/* Keyboard Input */
+
+		// We check against the previous keystate if it was down using bit 30 on the windows keyflags 
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+			if ( !(lParam & 0x40000000) || KBInput.IsAutoRepeatEnabled())
+			{ 
+				KBInput.OnKeyPressed(static_cast<KEYCODE>(wParam));
+			}
+			break;
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+			KBInput.OnKeyReleased(static_cast<KEYCODE>(wParam));
+			break;
+		case WM_CHAR:
+			KBInput.OnChar(static_cast<KEYCODE>(wParam));
+			break;
+		/* END OF KEYBOARD */
+
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -78,7 +112,7 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 	return  wndClass.hInst;
 }
 
-Window::WindowClass::WindowClass() noexcept
+Window::WindowClass::WindowClass() 
 	: hInst(GetModuleHandle(nullptr))
 {
 	WNDCLASSEX wc = { 0 };
@@ -88,12 +122,12 @@ Window::WindowClass::WindowClass() noexcept
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = GetInstance();
-	wc.hIcon = nullptr;
+	wc.hIcon = static_cast<HICON>(LoadImage(hInst, MAKEINTRESOURCE(IDI_APPICON), IMAGE_ICON, 32, 32, 0));
 	wc.hCursor = nullptr;
 	wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = GetName();
-	wc.hIconSm = nullptr;
+	wc.hIconSm = static_cast<HICON>(LoadImage(hInst, MAKEINTRESOURCE(IDI_APPICON), IMAGE_ICON, 16, 16, 0));
 	RegisterClassEx(&wc);
 }
 
@@ -103,8 +137,8 @@ Window::WindowClass::~WindowClass() noexcept
 }
 #pragma endregion
 
-
-Window::Exception::Exception(int lin, const char* file, HRESULT hr) noexcept
+#pragma  region Window Exception
+Window::Exception::Exception(int lin, const char* file, HRESULT hr)
 	: 
 	FRException(lin, file),
 	hr(hr)
@@ -155,3 +189,4 @@ std::string Window::Exception::GetErrorString() const noexcept
 {
 	return TranslateErrorCode(hr);
 }
+#pragma endregion

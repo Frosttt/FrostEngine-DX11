@@ -24,14 +24,14 @@ const char* FRException::GetType() const noexcept
 
 int FRException::GetLine() const noexcept
 {
-
+	return line;
 }
 
 std::string FRException::GetOriginString() const noexcept
 {
 	std::ostringstream oss;
-	oss << "[FILE] " << file << std::endl
-		<< "| [LINE]" << line;
+	oss << "[FILE]: " << file << std::endl
+			<< "[LINE]: " << line;
 		return oss.str();
 
 }

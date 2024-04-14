@@ -83,7 +83,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
     <IntDir>$(SolutionDir)bin\int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Source\;$(SolutionDir)Source\Public\</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Source\;$(SolutionDir)Source\Public;$(SolutionDir)FrostEngine\;$(SolutionDir)FrostEngine</IncludePath>
     <SourcePath>$(VC_SourcePath);$(SolutionDir)Source\;$(SolutionDir)Source\Public\</SourcePath>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
     <PublicIncludeDirectories>$(SolutionDir)Source/Public/</PublicIncludeDirectories>
@@ -167,16 +167,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Private\Keyboard.cpp" />
     <ClCompile Include="Source\Core\Private\FRException.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
     <ClCompile Include="Source\Core\Private\WindowsMessageMap.cpp" />
     <ClCompile Include="Source\Core\Private\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Core\Public\Keyboard.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Source\Core\Public\FRException.h" />
     <ClInclude Include="Source\Core\FrWin.h" />
     <ClInclude Include="Source\Core\Public\WindowsMessageMap.h" />
     <ClInclude Include="Source\Core\Public\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\Chris\Downloads\Frostdurr.ico" />
+    <Image Include="D:\furry\my work\_2023\Frostdurr256.png" />
+    <Image Include="frostengine.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FrostEngine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

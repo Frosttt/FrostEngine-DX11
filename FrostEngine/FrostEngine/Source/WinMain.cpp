@@ -54,10 +54,18 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		//Message
 		MSG WinMsg;
 		BOOL gResult;
+
+		// Main windows Loop
 		while (gResult = GetMessage(&WinMsg, nullptr, 0, 0) > 0)
 		{
 			TranslateMessage(&WinMsg);
 			DispatchMessage(&WinMsg);
+
+			if (win.KBInput.KeyIsPressed(VK_SPACE))
+			{
+				MessageBox(nullptr, "You are approaching 950 zells in your computer", "Zell", MB_OK | MB_ICONEXCLAMATION);
+			}
+
 		}
 
 		if (gResult == -1)
@@ -69,6 +77,8 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			return WinMsg.wParam;
 		}
 	}
+
+	// Exception Handling
 	catch (const FRException& e)
 	{
 		MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
