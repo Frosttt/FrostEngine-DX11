@@ -22,8 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{d8ddc5ca-c52a-4058-98c3-45ef3571ed73}</ProjectGuid>
-    <RootNamespace>MagusEngine</RootNamespace>
+    <RootNamespace>FrostEngine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>FrostEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -43,14 +44,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -80,8 +81,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)</OutDir>
-    <IntDir>$(SolutionDir)bin\int\$(Configuration)-$(Platform)\$(ProjectName)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Source\;$(SolutionDir)Source\Public\</IncludePath>
     <SourcePath>$(VC_SourcePath);$(SolutionDir)Source\;$(SolutionDir)Source\Public\</SourcePath>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
@@ -89,8 +90,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)</OutDir>
-    <IntDir>$(SolutionDir)bin\int\$(Configuration)-$(Platform)\$(ProjectName)</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)bin\int\$(Configuration)-$(Platform)\$(ProjectName)\</IntDir>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Source\;$(SolutionDir)Source\Public\</IncludePath>
     <SourcePath>$(VC_SourcePath);$(SolutionDir)Source\;$(SolutionDir)Source\Public\</SourcePath>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
@@ -136,7 +137,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>F:\repos\MagusEngine\MagusEngine\MagusEngine\Source;F:\repos\MagusEngine\MagusEngine\MagusEngine\Source\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FrostEngine\Source;$(SolutionDir)FrostEngine\Source\Core;$(SolutionDir)FrostEngine\Source\Core\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -156,7 +157,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>F:\repos\MagusEngine\MagusEngine\MagusEngine\Source;F:\repos\MagusEngine\MagusEngine\MagusEngine\Source\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FrostEngine\Source;$(SolutionDir)FrostEngine\Source\Core;$(SolutionDir)FrostEngine\Source\Core\Public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -166,14 +167,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Private\FRException.cpp" />
     <ClCompile Include="Source\WinMain.cpp" />
-    <ClCompile Include="Source\Private\WindowsMessageMap.cpp" />
-    <ClCompile Include="Source\Private\Window.cpp" />
+    <ClCompile Include="Source\Core\Private\WindowsMessageMap.cpp" />
+    <ClCompile Include="Source\Core\Private\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\FrWin.h" />
-    <ClInclude Include="Source\Public\WindowsMessageMap.h" />
-    <ClInclude Include="Source\Public\Window.h" />
+    <ClInclude Include="Source\Core\Public\FRException.h" />
+    <ClInclude Include="Source\Core\FrWin.h" />
+    <ClInclude Include="Source\Core\Public\WindowsMessageMap.h" />
+    <ClInclude Include="Source\Core\Public\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,21 +18,27 @@
     <ClCompile Include="Source\WinMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\WindowsMessageMap.cpp">
+    <ClCompile Include="Source\Core\Private\WindowsMessageMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Private\Window.cpp">
+    <ClCompile Include="Source\Core\Private\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Private\FRException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Public\WindowsMessageMap.h">
+    <ClInclude Include="Source\Core\Public\WindowsMessageMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\FrWin.h">
+    <ClInclude Include="Source\Core\FrWin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Public\Window.h">
+    <ClInclude Include="Source\Core\Public\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Public\FRException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
