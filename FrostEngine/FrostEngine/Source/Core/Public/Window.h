@@ -3,6 +3,7 @@
 #include "FRException.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include <optional>
 
 class Window
 {
@@ -45,6 +46,7 @@ class Window
 		Window(const Window& ) = delete;
 		Window& operator=(const Window&) = delete;
 		void SetTitle(const std::string titleText);
+		static std::optional<int> ProcessMessages();
 
 
 		Keyboard KBInput;
@@ -55,7 +57,7 @@ class Window
 		static LRESULT CALLBACK HandleMsgWinCall(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 
-		
+		std::string TitleText;
 		int width;
 		int height;
 		HWND hWnd;

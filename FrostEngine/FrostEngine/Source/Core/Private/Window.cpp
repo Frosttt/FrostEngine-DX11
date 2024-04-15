@@ -38,10 +38,35 @@ Window::Window(int _width, int _height, const char* name)
 
 void Window::SetTitle(const std::string titleText)
 {
+	if (titleText == TitleText)
+	{
+		return;
+	}
+	// TODO: Be wary of spamming window settings, add timer to block canging title text for 1 second or half a second
+	
+	TitleText = titleText;
+	
 	if (SetWindowText(hWnd, titleText.c_str()) == false)
 	{
 		throw FRWND_LAST_EXCEPT();
 	}
+}
+
+std::optional<int> Window::ProcessMessages()
+{
+	MSG msg;
+	
+	// while there are messages remove ad dispatch them
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+		{
+			return msg.wParam;
+		}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	return {};
 }
 
 Window::~Window()

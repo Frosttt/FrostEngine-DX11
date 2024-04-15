@@ -2,8 +2,7 @@
 #include "WindowsMessageMap.h"
 #include <iostream>
 #include <sstream>
-#include "Window.h"
-
+#include "Application.h"
 
 
 
@@ -50,59 +49,10 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	try
 	{
-		Window win(800, 400, "Frost Engine");
+		Application app = Application();
 
-		//Message
-		MSG WinMsg;
-		BOOL gResult;
-
-		// Main windows Loop
-		while (gResult = GetMessage(&WinMsg, nullptr, 0, 0) > 0)
-		{
-			TranslateMessage(&WinMsg);
-			DispatchMessage(&WinMsg);
-
-			while (!win.MouseInput.IsEmpty())
-			{
-				const auto e = win.MouseInput.Read();
-				std::ostringstream oss;
-				if (e.GetType() == Mouse::Event::Type::Move)
-				{
-					std::ostringstream oss;
-					oss << "Mouse Position: (" << e.GetPosX() << ", " << e.GetPosY() << std::endl;
-					win.SetTitle(oss.str());
-				}
-				//else if (e.GetType() == Mouse::Event::Type::WheelUp)
-				//{
-				//	debug++;
-				//	oss << "Wheel Up: " << debug;
-				//	win.SetTitle(oss.str());
-				//}
-				//else if (e.GetType() == Mouse::Event::Type::WheelDown)
-				//{
-				//	debug--;
-				//	oss << "Wheel Down: " << debug;
-				//	win.SetTitle(oss.str());
-				//}
-			}
-
-			if (win.KBInput.KeyIsPressed(VK_SPACE))
-			{
-				MessageBox(nullptr, "You are approaching 950 zells in your computer", "Zell", MB_OK | MB_ICONEXCLAMATION);
-			}
-
-		}
-
-		if (gResult == -1)
-		{
-			return -1;
-		}
-		else
-		{
-			return WinMsg.wParam;
-		}
+		return app.Run();
 	}
-
 	// Exception Handling
 	catch (const FRException& e)
 	{
@@ -112,12 +62,11 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	{
 		MessageBox(nullptr, e.what(), "Standard Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
-	catch ( ... )
+	catch (...)
 	{
 		MessageBox(nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
 
 	}
+
 	return -1;
-
-
 }

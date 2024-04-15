@@ -167,6 +167,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Core\Private\FRTimer.cpp" />
+    <ClCompile Include="Source\Core\Private\Application.cpp" />
     <ClCompile Include="Source\Core\Private\Mouse.cpp" />
     <ClCompile Include="Source\Core\Private\Keyboard.cpp" />
     <ClCompile Include="Source\Core\Private\FRException.cpp" />
@@ -175,6 +177,8 @@
     <ClCompile Include="Source\Core\Private\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Core\Public\FRTimer.h" />
+    <ClInclude Include="Source\Core\Public\Application.h" />
     <ClInclude Include="Source\Core\Public\Mouse.h" />
     <ClInclude Include="Source\Core\Public\Keyboard.h" />
     <ClInclude Include="resource.h" />
