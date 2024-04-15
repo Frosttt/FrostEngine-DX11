@@ -2,6 +2,7 @@
 #include "FrWin.h"
 #include "FRException.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 class Window
 {
@@ -38,14 +39,17 @@ class Window
 				HINSTANCE hInst;
 		};
 
-		public:
-			Window(int width, int height, const char* name);
-			~Window();
-			Window(const Window& ) = delete;
-			Window& operator=(const Window&) = delete;
+	public:
+		Window(int width, int height, const char* name);
+		~Window();
+		Window(const Window& ) = delete;
+		Window& operator=(const Window&) = delete;
+		void SetTitle(const std::string titleText);
 
-			Keyboard KBInput;
-		private:
+
+		Keyboard KBInput;
+		Mouse MouseInput;
+	private:
 		
 		static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK HandleMsgWinCall(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -14,7 +14,7 @@ public:
 	class Event
 	{
 	public:
-		enum class State
+		enum class Type
 		{
 			Pressed,
 			Hold,
@@ -22,18 +22,18 @@ public:
 			Invalid
 		};
 		private:
-		State state;
+		Type state;
 		KEYCODE code;
 		public:
 			Event()
 				:
-				state(State::Invalid),
+				state(Type::Invalid),
 				code(0)
 			{
 
 			}
 
-			Event(State state, KEYCODE code)
+			Event(Type state, KEYCODE code)
 				:
 				state(state),
 				code(code)
@@ -43,17 +43,17 @@ public:
 
 			bool IsKeyPressed() const noexcept
 			{
-				return state == State::Pressed;
+				return state == Type::Pressed;
 			}
 
 			bool IsKeyReleased() const noexcept
 			{
-				return state == State::Release;
+				return state == Type::Release;
 			}
 
 			bool IsValid() const noexcept
 			{
-				return state != State::Invalid;
+				return state != Type::Invalid;
 			}
 
 			KEYCODE GetCode() const noexcept

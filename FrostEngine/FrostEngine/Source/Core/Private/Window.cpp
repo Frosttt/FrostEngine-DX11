@@ -17,7 +17,7 @@ Window::Window(int _width, int _height, const char* name)
 	wr.right = width + wr.left;
 	wr.bottom = height + wr.top;
 
-	if (FAILED(AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == false)
 	{
 		throw FRWND_LAST_EXCEPT();
 	}
@@ -34,6 +34,14 @@ Window::Window(int _width, int _height, const char* name)
 		throw FRWND_LAST_EXCEPT();
 	}
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+}
+
+void Window::SetTitle(const std::string titleText)
+{
+	if (SetWindowText(hWnd, titleText.c_str()) == false)
+	{
+		throw FRWND_LAST_EXCEPT();
+	}
 }
 
 Window::~Window()
@@ -95,6 +103,75 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 			KBInput.OnChar(static_cast<KEYCODE>(wParam));
 			break;
 		/* END OF KEYBOARD */
+
+		/****** MOVE EVENTS ******/
+		case WM_MOUSEMOVE:
+		{
+			
+			// Check if we are inside
+
+			POINTS pt = MAKEPOINTS(lParam);
+
+			// Within window
+			if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
+			{
+				MouseInput.OnMouseMove(pt.x, pt.y);
+				if (!MouseInput.IsMouseInWindow())
+				{
+					SetCapture(hWnd);
+					MouseInput.OnMouseEnter();
+				}
+
+			}
+			else
+			{
+				if (wParam & (MK_LBUTTON | MK_RBUTTON))
+				{
+					MouseInput.OnMouseMove(pt.x, pt.y);
+				}
+				else
+				{
+					ReleaseCapture();
+					MouseInput.OnMouseLeave();
+				}
+			}
+			break;
+		}
+		case WM_MOUSEWHEEL:
+		{
+			POINTS pt = MAKEPOINTS(lParam);
+			const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+			MouseInput.HandleWheelDelta(pt.x, pt.y, delta);
+			break;
+		}
+		case WM_LBUTTONDOWN:
+		{
+			POINTS pt = MAKEPOINTS(lParam);
+			MouseInput.OnLeftPressed(pt.x, pt.y);
+			break;
+		}
+		case WM_LBUTTONUP:
+		{
+			POINTS pt = MAKEPOINTS(lParam);
+			MouseInput.OnLeftReleased(pt.x, pt.y);
+			break;
+		}
+		case WM_RBUTTONDOWN:
+		{
+			POINTS pt = MAKEPOINTS(lParam);
+			MouseInput.OnRightPressed(pt.x, pt.y);
+			break;
+		}
+		case WM_RBUTTONUP:
+		{
+			POINTS pt = MAKEPOINTS(lParam);
+			MouseInput.OnRightReleased(pt.x, pt.y);
+			break;
+		}
+		case WM_LBUTTONDBLCLK:
+		case WM_RBUTTONDBLCLK:
+		break;
+		/****** END MOVE EVENTS ******/
 
 	}
 

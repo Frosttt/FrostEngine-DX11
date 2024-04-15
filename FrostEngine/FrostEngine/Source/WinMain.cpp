@@ -42,6 +42,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 
+//static int debug = 0;
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -60,6 +61,30 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		{
 			TranslateMessage(&WinMsg);
 			DispatchMessage(&WinMsg);
+
+			while (!win.MouseInput.IsEmpty())
+			{
+				const auto e = win.MouseInput.Read();
+				std::ostringstream oss;
+				if (e.GetType() == Mouse::Event::Type::Move)
+				{
+					std::ostringstream oss;
+					oss << "Mouse Position: (" << e.GetPosX() << ", " << e.GetPosY() << std::endl;
+					win.SetTitle(oss.str());
+				}
+				//else if (e.GetType() == Mouse::Event::Type::WheelUp)
+				//{
+				//	debug++;
+				//	oss << "Wheel Up: " << debug;
+				//	win.SetTitle(oss.str());
+				//}
+				//else if (e.GetType() == Mouse::Event::Type::WheelDown)
+				//{
+				//	debug--;
+				//	oss << "Wheel Down: " << debug;
+				//	win.SetTitle(oss.str());
+				//}
+			}
 
 			if (win.KBInput.KeyIsPressed(VK_SPACE))
 			{

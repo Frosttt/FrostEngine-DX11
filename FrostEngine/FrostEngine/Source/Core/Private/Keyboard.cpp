@@ -53,14 +53,14 @@ void Keyboard::Flush() noexcept
 void Keyboard::OnKeyPressed(KEYCODE keycode) noexcept
 {
 	keystates[keycode] = true;
-	keybuffer.push(Keyboard::Event(Keyboard::Event::State::Pressed, keycode));
+	keybuffer.push(Keyboard::Event(Keyboard::Event::Type::Pressed, keycode));
 	TrimBuffer(keybuffer);
 }
 
 void Keyboard::OnKeyReleased(KEYCODE keycode) noexcept
 {
 	keystates[keycode] = false;
-	keybuffer.push(Keyboard::Event(Keyboard::Event::State::Release, keycode));
+	keybuffer.push(Keyboard::Event(Keyboard::Event::Type::Release, keycode));
 	TrimBuffer(keybuffer);
 }
 
