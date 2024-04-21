@@ -3,7 +3,16 @@
 
 FRException::FRException(int line, const char* file) noexcept
 : line(line),
-	file(file)
+	file(file),
+	text()
+{
+
+}
+
+FRException::FRException(int line, const char* file, const char* text) noexcept
+	: line(line),
+	file(file),
+	text(text)
 {
 
 }
@@ -30,6 +39,10 @@ int FRException::GetLine() const noexcept
 std::string FRException::GetOriginString() const noexcept
 {
 	std::ostringstream oss;
+	if (!text.empty())
+	{ 
+		oss << text << std::endl;
+	}
 	oss << "[FILE]: " << file << std::endl
 			<< "[LINE]: " << line;
 		return oss.str();

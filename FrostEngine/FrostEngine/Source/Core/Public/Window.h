@@ -4,6 +4,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include <optional>
+#include <memory>
+#include "Renderer.h"		
 
 class Window
 {
@@ -47,6 +49,7 @@ class Window
 		Window& operator=(const Window&) = delete;
 		void SetTitle(const std::string titleText);
 		static std::optional<int> ProcessMessages();
+		Renderer& GetRenderer();
 
 
 		Keyboard KBInput;
@@ -61,6 +64,7 @@ class Window
 		int width;
 		int height;
 		HWND hWnd;
+		std::unique_ptr<Renderer> pRenderer;
 };
 
 #define FRWND_EXCEPT(hr) Window::Exception(__LINE__, __FILE__, hr);

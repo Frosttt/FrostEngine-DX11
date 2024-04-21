@@ -39,6 +39,15 @@
     <ClCompile Include="Source\Core\Private\FRTimer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Private\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\dxerr\dxerr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\dxerr\DxgiInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Core\Public\WindowsMessageMap.h">
@@ -68,6 +77,21 @@
     <ClInclude Include="Source\Core\Public\FRTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\Public\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\dxerr\dxerr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Public\GraphicsExceptionMacros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\dxerr\DxgiInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\FrWRL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="D:\furry\my work\_2023\Frostdurr256.png">
@@ -84,5 +108,16 @@
     <ResourceCompile Include="FrostEngine.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\Core\dxerr\DXGetErrorDescription.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Source\Core\dxerr\DXGetErrorString.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Source\Core\dxerr\DXTrace.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

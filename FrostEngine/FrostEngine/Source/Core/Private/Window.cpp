@@ -33,7 +33,9 @@ Window::Window(int _width, int _height, const char* name)
 	{
 		throw FRWND_LAST_EXCEPT();
 	}
+
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+	pRenderer = std::make_unique<Renderer>(hWnd);
 }
 
 void Window::SetTitle(const std::string titleText)
@@ -67,6 +69,11 @@ std::optional<int> Window::ProcessMessages()
 		DispatchMessage(&msg);
 	}
 	return {};
+}
+
+Renderer& Window::GetRenderer()
+{
+	return *pRenderer;
 }
 
 Window::~Window()
