@@ -7,7 +7,8 @@
 
 #pragma comment(lib, "d3d11.lib")
 
-
+namespace wrl = Microsoft::WRL;
+//namespace dx = DirectX;
 
 Renderer::Renderer(HWND hWind)
 	: pDevice(nullptr)
@@ -54,10 +55,9 @@ Renderer::Renderer(HWND hWind)
 		nullptr,
 		&pContext
 	));
-
-	ID3D11Resource* pBackBuffer = nullptr;
-	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)));
-	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pTarget));
+	wrl::ComPtr<ID3D11Texture2D> pBackBuffer;
+	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
+	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTarget));
 	pBackBuffer->Release();
 	//{
 	//	FR_EXCEPT();
@@ -65,34 +65,11 @@ Renderer::Renderer(HWND hWind)
 
 }
 
-Renderer::~Renderer()
-{
-	if (pDevice != nullptr)
-	{
-		pDevice->Release();
-	}
-
-	if (pSwapChain != nullptr)
-	{
-		pSwapChain->Release();
-	}
-
-	if (pContext != nullptr)
-	{
-		pContext->Release();
-	}
-
-	if (!pTarget)
-	{
-		pTarget->Release();
-	}
-
-}
 
 void Renderer::ClearBuffer(float r, float g, float b, float a) noexcept
 {
 	const float color[] = {r, g, b, a};
-	pContext->ClearRenderTargetView(pTarget, color);
+	pContext->ClearRenderTargetView(pTarget.Get(), color);
 }
 
 void Renderer::EndFrame()

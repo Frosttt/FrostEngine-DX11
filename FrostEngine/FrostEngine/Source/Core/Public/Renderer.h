@@ -4,6 +4,7 @@
 #include "FRException.h"
 #include <vector>
 #include "DxgiInfoManager.h"
+#include "FrWRL.h"
 
 class Renderer
 {
@@ -48,7 +49,7 @@ class Renderer
 	Renderer(HWND hWind);
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
-	~Renderer();
+	~Renderer() = default;
 
 	void ClearBuffer(float r, float g, float b, float a = 1.0f) noexcept;
 	void EndFrame();
@@ -58,9 +59,10 @@ class Renderer
 	DxgiInfoManager infoManager;
 	#endif
 
-	ID3D11Device* pDevice;
-	IDXGISwapChain* pSwapChain;
-	ID3D11DeviceContext* pContext;
-	ID3D11RenderTargetView* pTarget;
+
+	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
 };
 
