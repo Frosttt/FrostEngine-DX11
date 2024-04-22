@@ -4,8 +4,11 @@
 #include <iostream>
 #include <sstream>
 #include "GraphicsExceptionMacros.h"
+#include <d3dcompiler.h>
+
 
 #pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
 namespace wrl = Microsoft::WRL;
 //namespace dx = DirectX;
@@ -38,7 +41,7 @@ Renderer::Renderer(HWND hWind)
 #ifndef NDEBUG
 	swapCreateFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-	
+
 	HRESULT hr;
 
 		GFX_THROW_INFO (D3D11CreateDeviceAndSwapChain(
@@ -58,7 +61,6 @@ Renderer::Renderer(HWND hWind)
 	wrl::ComPtr<ID3D11Texture2D> pBackBuffer;
 	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTarget));
-	pBackBuffer->Release();
 	//{
 	//	FR_EXCEPT();
 	//}
@@ -70,6 +72,104 @@ void Renderer::ClearBuffer(float r, float g, float b, float a) noexcept
 {
 	const float color[] = {r, g, b, a};
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
+}
+
+void Renderer::DrawTestTriangle()
+{
+	namespace wrl = Microsoft::WRL;
+	HRESULT hr;
+
+	struct Vertex
+	{
+		float x;
+		float y;
+	};
+
+	// create vertex buffer (2d triangle)
+	const Vertex vertices[] =
+	{
+		{0.0f, 0.5f},
+		{0.5f, -0.5f},
+		{-0.5f, -0.5f},
+	};
+
+	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
+	// Build buffer description
+	D3D11_BUFFER_DESC bd = {};
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER; // what kind of binding
+	bd.Usage = D3D11_USAGE_DEFAULT; // What is allowed to use this data
+	bd.CPUAccessFlags = 0u;
+	bd.MiscFlags = 0u;
+	// Self explanatory
+	bd.ByteWidth = sizeof(vertices);
+	bd.StructureByteStride = sizeof(Vertex);
+	D3D11_SUBRESOURCE_DATA sd = {};
+	sd.pSysMem = vertices;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
+	
+	wrl::ComPtr<ID3DBlob> pBlob;
+
+	// bind vertex buffer to pipeline
+	const UINT stride = sizeof(Vertex);
+	const UINT offset = 0u;
+	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+	// Create Pixel Shader
+	wrl::ComPtr<ID3D11PixelShader> pPixelShader;
+	GFX_THROW_INFO(D3DReadFileToBlob(L"PixelShader.cso", &pBlob));
+	GFX_THROW_INFO(pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
+
+	// Bind Pixel shader
+	pContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
+
+
+	// Create Vertext Shader
+	wrl::ComPtr<ID3D11VertexShader> pVertexShader;
+	GFX_THROW_INFO( D3DReadFileToBlob(L"VertexShader.cso", &pBlob) );
+	GFX_THROW_INFO( pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader) );
+
+	// Bind Vertex shader
+	pContext->VSSetShader(pVertexShader.Get(), nullptr,0u);
+
+	// iput vertext layout
+	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
+	const D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+			{ "Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	GFX_THROW_INFO( pDevice->CreateInputLayout(
+		ied,
+		(UINT)std::size(ied),
+		pBlob->GetBufferPointer(),
+		pBlob->GetBufferSize(),
+		&pInputLayout
+	) );
+
+	// bind input vertext layout
+	pContext->IASetInputLayout( pInputLayout.Get());
+
+
+
+	// bind render target
+	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), nullptr);
+
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = 800;
+	vp.Height = 600;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	pContext->RSSetViewports(1u, &vp);
+
+	// Set primitive topology
+	// https://learn.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-primitive-topologies
+	pContext->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); 
+
+
+	GFX_THROW_INFO_ONLY(pContext->Draw((UINT)std::size(vertices), 0u));
 }
 
 void Renderer::EndFrame()

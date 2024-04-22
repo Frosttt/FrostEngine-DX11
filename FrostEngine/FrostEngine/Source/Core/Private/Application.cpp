@@ -3,7 +3,7 @@
 #include <iomanip>
 
 Application::Application()
-: wnd(Window(800, 400, "Frost Engine"))
+: wnd(Window(800, 600, "Frost Engine"))
 {
 
 }
@@ -35,6 +35,8 @@ void Application::DrawFrame()
 
 	const float c = sin(Uptime.Peek()) / 2.0f + 0.5f;
 	Gfx.ClearBuffer(c, c, 1.0f);
+
+	Gfx.DrawTestTriangle();
 
 	wnd.GetRenderer().EndFrame();
 }

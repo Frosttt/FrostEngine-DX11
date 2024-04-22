@@ -8,6 +8,8 @@
 
 class Renderer
 {
+
+#pragma region Exceptions
 	public:
 		class Exception : public FRException
 		{
@@ -45,6 +47,8 @@ class Renderer
 		private:
 			std::string reason;
 		};
+#pragma endregion
+
 	public:
 	Renderer(HWND hWind);
 	Renderer(const Renderer&) = delete;
@@ -52,6 +56,7 @@ class Renderer
 	~Renderer() = default;
 
 	void ClearBuffer(float r, float g, float b, float a = 1.0f) noexcept;
+	void DrawTestTriangle();
 	void EndFrame();
 	private:
 
@@ -59,10 +64,9 @@ class Renderer
 	DxgiInfoManager infoManager;
 	#endif
 
-
-	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
+	Microsoft::WRL::ComPtr<ID3D11Device> pDevice; // Used for allcation
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext; // Used for configuration and executing rendering commands
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
 };
 
