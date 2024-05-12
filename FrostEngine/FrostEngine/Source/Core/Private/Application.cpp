@@ -28,13 +28,13 @@ void Application::DrawFrame()
 {
 	std::ostringstream oss;
 	const float t = Uptime.Peek();
-	oss << "Frost Engine: " << std::setprecision(1) << std::fixed << t;
+	oss << "Frost Engine: " << std::setprecision(1) << std::fixed << t << "s";
 	wnd.SetTitle(oss.str());
 
 	Renderer& Gfx = wnd.GetRenderer();
 
 	const float c = sin(Uptime.Peek()) / 2.0f + 0.5f;
-	Gfx.ClearBuffer(c, c, 1.0f);
+	Gfx.ClearBuffer(c, c, c);
 
 	Gfx.DrawTestTriangle();
 

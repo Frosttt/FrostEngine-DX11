@@ -5,6 +5,7 @@
 #include <sstream>
 #include "GraphicsExceptionMacros.h"
 #include <d3dcompiler.h>
+#include "FrUtil.h"
 
 
 #pragma comment(lib, "d3d11.lib")
@@ -76,21 +77,37 @@ void Renderer::ClearBuffer(float r, float g, float b, float a) noexcept
 
 void Renderer::DrawTestTriangle()
 {
+
+	// Graphics pipeline reading: https://learn.microsoft.com/en-us/windows/win32/direct3d11/overviews-direct3d-11-graphics-pipeline
+
 	namespace wrl = Microsoft::WRL;
 	HRESULT hr;
+	
+	struct Color
+	{
+		unsigned char r;
+		unsigned char g;
+		unsigned char b;
+		unsigned char a;
+
+	};
 
 	struct Vertex
 	{
 		float x;
 		float y;
+		Color color;
 	};
+
 
 	// create vertex buffer (2d triangle)
 	const Vertex vertices[] =
 	{
-		{0.0f, 0.5f},
-		{0.5f, -0.5f},
-		{-0.5f, -0.5f},
+		{0.0f, 0.5f , {255, 0, 0, 255}},
+		{0.5f, -0.5f, {0, 255, 0, 255}},
+		{-0.5f, -0.5f, {0, 0, 255, 255}},
+		{0.0f, 0.5f, {255, 0, 0, 255}},
+
 	};
 
 	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -116,26 +133,28 @@ void Renderer::DrawTestTriangle()
 
 	// Create Pixel Shader
 	wrl::ComPtr<ID3D11PixelShader> pPixelShader;
-	GFX_THROW_INFO(D3DReadFileToBlob(L"PixelShader.cso", &pBlob));
+	GFX_THROW_INFO(D3DReadFileToBlob(SHADERPATH("PixelShader.cso"), &pBlob));
 	GFX_THROW_INFO(pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
 
 	// Bind Pixel shader
 	pContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
 
 
-	// Create Vertext Shader
+	// Create Vertex Shader
 	wrl::ComPtr<ID3D11VertexShader> pVertexShader;
-	GFX_THROW_INFO( D3DReadFileToBlob(L"VertexShader.cso", &pBlob) );
+	GFX_THROW_INFO( D3DReadFileToBlob(SHADERPATH("VertexShader.cso"), &pBlob) );
 	GFX_THROW_INFO( pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader) );
 
 	// Bind Vertex shader
 	pContext->VSSetShader(pVertexShader.Get(), nullptr,0u);
 
-	// iput vertext layout
+	// input vertex layout
 	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 			{ "Position", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "Color", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			//{ "Time", 0, DXGI_FORMAT_R32_FLOAT, 0, 16u, D3D11_INPUT_PER_INSTANCE_DATA, 0}
 	};
 
 	GFX_THROW_INFO( pDevice->CreateInputLayout(
@@ -146,7 +165,7 @@ void Renderer::DrawTestTriangle()
 		&pInputLayout
 	) );
 
-	// bind input vertext layout
+	// bind input vertex layout
 	pContext->IASetInputLayout( pInputLayout.Get());
 
 

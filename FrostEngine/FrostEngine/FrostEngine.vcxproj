@@ -144,7 +144,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <FxCompile>
-      <ObjectFileOutput>$(SolutionDir)%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>$(SolutionDir)FrostEngine\Binaries\Shaders\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -186,6 +186,7 @@
     <ClInclude Include="Source\Core\dxerr\dxerr.h" />
     <ClInclude Include="Source\Core\dxerr\DxgiInfoManager.h" />
     <ClInclude Include="Source\Core\FrWRL.h" />
+    <ClInclude Include="Source\Core\FrUtil.h" />
     <ClInclude Include="Source\Core\Public\GraphicsExceptionMacros.h" />
     <ClInclude Include="Source\Core\Public\Renderer.h" />
     <ClInclude Include="Source\Core\Public\FRTimer.h" />
@@ -223,7 +224,6 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
