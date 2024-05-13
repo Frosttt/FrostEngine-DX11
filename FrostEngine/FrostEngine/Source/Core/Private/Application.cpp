@@ -33,10 +33,10 @@ void Application::DrawFrame()
 
 	Renderer& Gfx = wnd.GetRenderer();
 
-	const float c = sin(Uptime.Peek()) / 2.0f + 0.5f;
+	const float c = /*sin(Uptime.Peek() / 4.0f) / 2.0f + 0.5f*/ 0;
 	Gfx.ClearBuffer(c, c, c);
 
-	Gfx.DrawTestTriangle();
+	Gfx.DrawTestTriangle(0, Uptime.Peek());
 
 	wnd.GetRenderer().EndFrame();
 }

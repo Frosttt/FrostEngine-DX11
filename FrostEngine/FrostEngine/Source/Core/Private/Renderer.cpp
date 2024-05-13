@@ -3,6 +3,7 @@
 #include "dxerr.h"
 #include <iostream>
 #include <sstream>
+#include <cmath>
 #include "GraphicsExceptionMacros.h"
 #include <d3dcompiler.h>
 #include "FrUtil.h"
@@ -75,7 +76,7 @@ void Renderer::ClearBuffer(float r, float g, float b, float a) noexcept
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
 }
 
-void Renderer::DrawTestTriangle()
+void Renderer::DrawTestTriangle(float angle, float uptime)
 {
 
 	// Graphics pipeline reading: https://learn.microsoft.com/en-us/windows/win32/direct3d11/overviews-direct3d-11-graphics-pipeline
@@ -174,12 +175,50 @@ void Renderer::DrawTestTriangle()
 	isd.pSysMem = indices;
 	GFX_THROW_INFO(pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer));
 
+	// Bind index buffer
 	pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT,0u);
 	
+
+	// Create constant bffer for transformation matrix
+	struct ConstantBuffer
+	{
+		struct  
+		{
+			float element[4][4];
+		} transformation;
+		float padding[3];
+		float time;
+	};
+
+
+	const ConstantBuffer cb =
+	{
+		{
+		( 3.0f / 4.0f) * std::cos(angle), std::sin(angle), 0.0f, 0.0f,
+		( 3.0f / 4.0f) * -std::sin(angle), std::cos(angle), 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f,
+		},
+		{0, 0, 0 }, 
+		uptime
+	};
+
+	wrl::ComPtr<ID3D11Buffer> pConstantBuffer;
+	D3D11_BUFFER_DESC cbd;
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.Usage = D3D11_USAGE_DYNAMIC;
+	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbd.MiscFlags = 0u;
+	cbd.ByteWidth = sizeof(cb);
+	cbd.StructureByteStride = 0u;
+	D3D11_SUBRESOURCE_DATA csd = {};
+	csd.pSysMem = &cb;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
+
+	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+	pContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+
 	wrl::ComPtr<ID3DBlob> pBlob;
-
-
-
 	// Create Pixel Shader
 	wrl::ComPtr<ID3D11PixelShader> pPixelShader;
 	GFX_THROW_INFO(D3DReadFileToBlob(SHADERPATH("PixelShader.cso"), &pBlob));
@@ -224,12 +263,12 @@ void Renderer::DrawTestTriangle()
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = 400;
-	vp.Height = 300;
+	vp.Width = 800;
+	vp.Height = 600;
 	vp.MinDepth = 0;
 	vp.MaxDepth = 1;
-	vp.TopLeftX = 100;
-	vp.TopLeftY = 100;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
 	pContext->RSSetViewports(1u, &vp);
 
 	// Set primitive topology
