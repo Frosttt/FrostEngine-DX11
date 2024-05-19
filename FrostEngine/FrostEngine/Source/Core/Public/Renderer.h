@@ -56,7 +56,7 @@ class Renderer
 	~Renderer() = default;
 
 	void ClearBuffer(float r, float g, float b, float a = 1.0f) noexcept;
-	void DrawTestTriangle(float x, float y, float angle = 0, float uptime = 0);
+	void DrawTestTriangle(float x, float y, float z, float angle, float uptime);
 	void EndFrame();
 	private:
 
@@ -68,5 +68,6 @@ class Renderer
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext; // Used for configuration and executing rendering commands
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
 };
 

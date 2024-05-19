@@ -1,15 +1,9 @@
 cbuffer CBuf
 {
-	matrix transform;
-	float3 padding;
-	float time;
+	float4 face_colors[6];
 };
 
-float4 main(float3 color : Color) : SV_TARGET
+float4 main(uint tid : SV_PrimitiveID) : SV_TARGET
 {
-  float red =   color.r * sin( 0.1f + time) * 0.5f + 0.5f; // Use sine wave for red component
-  float green = color.g * cos( 0.1f + time) * 0.5f + 0.5f; // Use sine wave for green component
-  float blue =  color.b * sin( 0.5f + time) * 0.5f + 0.5f; // Use combined sine wave for blue component
-
- return float4(red, green, blue, 1.0f);
+ return face_colors[tid / 2];
 }

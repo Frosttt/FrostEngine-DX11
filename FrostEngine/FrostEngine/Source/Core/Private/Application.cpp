@@ -39,7 +39,8 @@ void Application::DrawFrame()
 	float x = wnd.MouseInput.GetPosX() / 400.0f - 1.0f;
 	float y = wnd.MouseInput.GetPosY() / 300.0f - 1.0f;
 
-	Gfx.DrawTestTriangle(x, -y, Uptime.Peek() / 2.0f, Uptime.Peek());
+	Gfx.DrawTestTriangle(0, 0, 0, -Uptime.Peek() / 4.0f, -Uptime.Peek());
+	Gfx.DrawTestTriangle(x, 0, 0, Uptime.Peek() * 2, Uptime.Peek());
 
 	wnd.GetRenderer().EndFrame();
 }
