@@ -6,7 +6,7 @@ struct VSOut
 
 cbuffer CBuf
 {
-	row_major matrix transform;
+	matrix transform;
 	float3 padding;
 	float time;
 };

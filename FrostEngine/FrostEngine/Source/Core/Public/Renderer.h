@@ -56,7 +56,7 @@ class Renderer
 	~Renderer() = default;
 
 	void ClearBuffer(float r, float g, float b, float a = 1.0f) noexcept;
-	void DrawTestTriangle(float angle = 0, float uptime = 0);
+	void DrawTestTriangle(float x, float y, float angle = 0, float uptime = 0);
 	void EndFrame();
 	private:
 

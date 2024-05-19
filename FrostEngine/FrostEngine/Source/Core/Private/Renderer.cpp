@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <DirectXMath.h>
 #include "GraphicsExceptionMacros.h"
 #include <d3dcompiler.h>
 #include "FrUtil.h"
@@ -13,7 +14,7 @@
 #pragma comment(lib, "d3dcompiler.lib")
 
 namespace wrl = Microsoft::WRL;
-//namespace dx = DirectX;
+namespace dx = DirectX;
 
 Renderer::Renderer(HWND hWind)
 	: pDevice(nullptr)
@@ -76,7 +77,7 @@ void Renderer::ClearBuffer(float r, float g, float b, float a) noexcept
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
 }
 
-void Renderer::DrawTestTriangle(float angle, float uptime)
+void Renderer::DrawTestTriangle(float x, float y, float angle, float uptime)
 {
 
 	// Graphics pipeline reading: https://learn.microsoft.com/en-us/windows/win32/direct3d11/overviews-direct3d-11-graphics-pipeline
@@ -182,10 +183,7 @@ void Renderer::DrawTestTriangle(float angle, float uptime)
 	// Create constant bffer for transformation matrix
 	struct ConstantBuffer
 	{
-		struct  
-		{
-			float element[4][4];
-		} transformation;
+		dx::XMMATRIX transform;
 		float padding[3];
 		float time;
 	};
@@ -193,14 +191,17 @@ void Renderer::DrawTestTriangle(float angle, float uptime)
 
 	const ConstantBuffer cb =
 	{
+
 		{
-		( 3.0f / 4.0f) * std::cos(angle), std::sin(angle), 0.0f, 0.0f,
-		( 3.0f / 4.0f) * -std::sin(angle), std::cos(angle), 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f,
-		},
-		{0, 0, 0 }, 
-		uptime
+			dx::XMMatrixTranspose(
+							dx::XMMatrixRotationZ(angle) *
+							dx::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f) *
+							dx::XMMatrixTranslation(x, y, 0.0f)
+							)
+		}
+							,
+			{0, 0, 0 },
+			uptime
 	};
 
 	wrl::ComPtr<ID3D11Buffer> pConstantBuffer;
